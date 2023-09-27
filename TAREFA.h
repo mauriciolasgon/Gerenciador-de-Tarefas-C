@@ -24,6 +24,52 @@ data* CriaData(){
 tarefa * CriaTarefa(){
     return NULL;
 }
+void ImprimeTarefa(tarefa* recebida){
+    printf("\n 1- Codigo : %d",recebida->Codigo);
+    printf("\n 2- Nome : %s",recebida->Nome);
+    printf("\n 3- Projeto a qual faz parte : %s",recebida->Projeto);
+    printf("\n 4- Data de inicio : %d/%d/%d",recebida->Inicio->Dia,recebida->Inicio->Mes,recebida->Inicio->Ano);
+    printf("\n 5- Data de termino: %d/%d/%d",recebida->Termino->Dia,recebida->Termino->Mes,recebida->Termino->Ano);
+    printf("\n 6- Status: %d",recebida->Status);
+    printf("\n 7- Prioridade: %d",recebida->Prioridade);
+}
+
+void modificaTarefa(tarefa* recebida){
+    int escolha;
+    ImprimeTarefa(recebida);
+    printf("\n Qual topico deseja modificar? ");
+    scanf("%d",&escolha);
+    if(escolha==1 || escolha==4){
+        printf("\n Esse topico nao pode ser alterado");
+    }
+    switch(escolha){
+        case 2:
+            printf("\n Novo nome: ");
+            scanf("%[^\n]",recebida->Nome);
+            break;
+        case 3:
+            printf("\n Novo projeto a que pertence: ");
+            scanf("%[^\n]",recebida->Projeto);
+            break;
+        case 5:
+            printf("\n Nova data de termino: ");
+            scanf("%d",&recebida->Termino->Dia);
+            scanf("%d",&recebida->Termino->Mes);
+            scanf("%d",&recebida->Termino->Ano);
+            break;
+        case 6:
+            printf("\n Novo status");
+            scanf("%d",&recebida->Status);
+            break;
+        case 7:
+            printf("\n Novs prioridade");
+            scanf("%d",&recebida->Prioridade);
+            break;
+    }
+
+
+
+}
 
 tarefa* AdicionaValoresTarefa(){
     tarefa* recebida=(tarefa*)malloc(sizeof(tarefa));
@@ -57,11 +103,7 @@ tarefa* AdicionaValoresTarefa(){
     return recebida;
 }
 
-void imprimeTarefa(tarefa* recebida){
-    printf("\n%d",recebida->Codigo);
-    printf("\n%s",recebida->Nome);
-    printf("\n%d",recebida->Inicio->Dia);
-}
+
 
 
 

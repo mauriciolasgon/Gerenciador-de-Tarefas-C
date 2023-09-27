@@ -1,11 +1,28 @@
 #ifndef LISTA_H_INCLUDED
 #define LISTA_H_INCLUDED
-#include "TAREFA.H"
+#include "TAREFA.h"
 
 typedef struct TAREFA lista;
 
 lista * CriaLista(){
     return NULL;
+}
+int VaziaLista (lista* f)
+{
+    if (f==NULL) return 1;
+    return 0;
+
+}
+
+lista * RetiraTarefaLista(tarefa* recebida,int codigo ){
+    lista *tarefa;
+    for( lista* aux=recebida;aux!=NULL;aux=aux->Prox){
+        if(aux->Codigo==codigo){
+            tarefa=aux;
+        }
+    }
+    return tarefa;
+
 }
 
 lista* insereLista(lista* recebida,lista* novaTarefa){
@@ -13,14 +30,15 @@ lista* insereLista(lista* recebida,lista* novaTarefa){
     return novaTarefa;
 }
 void imprimeLista(lista* l){
-    for(l;l!=NULL;l=l->Prox){
-        printf("\n%d",l->Codigo);
+    for(lista*aux=l;aux!=NULL;aux=aux->Prox){
+        printf("%d ", aux->Codigo);
+        printf("--");
     }
 }
 
 int contaLista(lista* l){
     int n=0;
-    for(l;l!=NULL;l=l->Prox){
+    for(lista* aux=l;aux!=NULL;aux=aux->Prox){
         n++;
     }
     return n;

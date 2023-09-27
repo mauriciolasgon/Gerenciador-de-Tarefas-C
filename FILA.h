@@ -105,4 +105,18 @@ Fila* liberaFila (Fila* f)
     return NULL;
 }
 
+Fila* mergeFilaPrioridades(Fila* f1, Fila* f2,Fila *f3){
+    Fila * prioridades=f1;
+    for(no *aux=f1->ini;aux!=NULL;aux=aux->Prox){
+        InsereFila(prioridades,aux);
+    }
+    for(no *aux=f2->ini;aux!=NULL;aux=aux->Prox){
+        InsereFila(prioridades,aux);
+    }
+    for(no *aux=f3->ini;aux!=NULL;aux=aux->Prox){
+        InsereFila(prioridades,aux);
+    }
+    return prioridades;
+}
+
 #endif // FILA_H_INCLUDED
