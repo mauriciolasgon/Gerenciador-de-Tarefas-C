@@ -4,12 +4,10 @@
 #include "FILA.h"
 #include "TAREFA.h"
 
-
 typedef struct TAREFA Tarefa;
 
-void menu(int *escolha,lista **listaPendentes){
-    int codigo;
-    Tarefa *tarefa=CriaTarefa();
+void menu(int *escolha,lista **listaTarefas,lista **listaPendentes,lista **listaConcluidas){
+
     printf(" 1- Adicionar uma nova tarefa\n");
     printf(" 2- Modificar tarefa\n");
     printf(" 3- Concluir tarefa\n");
@@ -19,38 +17,46 @@ void menu(int *escolha,lista **listaPendentes){
     printf(" 7- Visualizar tarefas com atraso e sem atraso\n");
     printf(" 8- Sair do programa\n\n -> ");
     scanf("%d",escolha);
+    system("cls");
     switch(*escolha){
         case 1:
-            *listaPendentes=insereLista(*listaPendentes,AdicionaValoresTarefa());
+
+            *listaTarefas=insereLista(*listaTarefas,AdicionaValoresTarefa());
+
             break;
         case 2:
-            if(!VaziaLista(*listaPendentes)){
-                imprimeLista(*listaPendentes);
-                printf(" \nDigite o codigo da tarefa que deseja modificar:  \n");
-                scanf("%d",&codigo);
-                tarefa=RetiraTarefaLista(*listaPendentes,codigo);
-                modificaTarefa(tarefa);
-            }
-            else{
-                printf(" Nao existem tarefas");
-            }
+
+            modificaTarefa(*listaTarefas,listaPendentes,0);
             break;
         case 3:
-            // conluirTarefa(tarefa);
+            concluirTarefa(listaTarefas,listaConcluidas);
+            printf("\n");
             break;
         case 4:
-            // atualizaStatus(tarefa);
+            modificaTarefa(*listaTarefas,listaPendentes,1);
             break;
         case 5:
-            // imprimeTarefasPendentes();
+
+            imprimeLista(*listaPendentes);
+
+            printf("\n");
+
             break;
         case 6:
-            // imprimeTarefasConcluidas();
+            imprimeLista(*listaConcluidas);
+            printf("\n");
             break;
         case 7:
             // imprimeComSemAtraso();
             break;
         case 8:
+            break;
+        case 9:
+            ordenaLista(listaTarefas);
+            printf("\n");
+
+            imprimeLista(*listaTarefas);
+            printf("\n");
             break;
 
 
@@ -59,13 +65,13 @@ void menu(int *escolha,lista **listaPendentes){
 }
 int main()
 {
-    lista* ListaTarefas=CriaLista(), *listaPendentes=CriaLista();
+    lista* ListaTarefas=CriaLista(), *listaPendentes=CriaLista(),*listaConcluidas=CriaLista(),*listaAtrasadas=CriaLista();
     Fila * FilaPrioridade1=CriaFila(),*FilaPrioridade2=CriaFila(),*FilaPrioridade3=CriaFila(),*FilaPrioridades=CriaFila();
     int escolha;
 
     do{
-        menu(&escolha,&listaPendentes);
-        system("cls");
+        menu(&escolha,&ListaTarefas,&listaPendentes,&listaConcluidas);
+
 
 
     }while(escolha!=8);

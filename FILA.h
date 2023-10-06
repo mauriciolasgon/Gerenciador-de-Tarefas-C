@@ -1,6 +1,7 @@
 #ifndef FILA_H_INCLUDED
 #define FILA_H_INCLUDED
 #include "TAREFA.h"
+#include "LISTA.h"
 
 /* FUNÇÕES DE MANIPULAÇÃO DE PFILA
 
@@ -16,12 +17,11 @@ Fila* liberaFila (Fila* f) LIBERA A FILA
 
 void imprimeFila (Fila* f)IMPRIME A FILA
 */
-typedef struct TAREFA no;
 
 typedef struct fila
 {
-    no * ini;
-    no * fim;
+    tarefa * ini;
+    tarefa * fim;
 } Fila;
 
 int VaziaFila (Fila* f)
@@ -30,7 +30,9 @@ int VaziaFila (Fila* f)
     return 0;
 
 }
-
+// funçoes da biblioteca lista usadas nessa biblioteca
+lista*CriaLista();
+lista* insereLista(lista* recebida,tarefa* novaTarefa);
 
 Fila* CriaFila ()
 {
@@ -39,7 +41,7 @@ Fila* CriaFila ()
     return f;
 }
 
-no* ins_fim (no* fim, no* nova)
+tarefa* ins_fim (tarefa* fim, tarefa* nova)
 {
     nova->Prox=NULL;
     if (fim != NULL){ /* verifica se lista não estava vazia */
@@ -48,7 +50,7 @@ no* ins_fim (no* fim, no* nova)
     return nova;
 }
 
-void InsereFila (Fila* f, no* novaTarefa)
+void InsereFila (Fila* f, tarefa* novaTarefa)
 {
     f->fim = ins_fim(f->fim,novaTarefa);
     if (f->ini==NULL){ /* fila antes vazia? */
@@ -56,33 +58,41 @@ void InsereFila (Fila* f, no* novaTarefa)
     }
 }
 
-no* retira_ini (no* ini)
+tarefa* retira_ini (tarefa* ini)
 {
-    no* p = ini->Prox;
-    free(ini);
+    tarefa* p = ini->Prox;
+
     return p;
 }
 
-no* RetiraFila (Fila* f)
+tarefa* RetiraFila (Fila* f)
 {
-    no* tarefa;
+    tarefa *taf;
     if (VaziaFila(f))
     {
         printf("Fila vazia.\n");
         exit(0); /* aborta programa */
     }
-    tarefa = f->ini;
+    taf = f->ini;
 
     f->ini = retira_ini(f->ini);
     if (f->ini == NULL){
         f->fim = NULL;
     } /* fila ficou vazia? */
-    return tarefa;
+    return taf;
+}
+
+int contaFila(Fila *f){
+    int n=0;
+    for(tarefa*aux=f->ini;aux!=NULL;aux=aux->Prox){
+        n++;
+    }
+    return n;
 }
 
 void imprimeFila (Fila* f)
 {
-    no* q;
+    tarefa* q;
     printf("\n\t\t");
     for (q=f->ini; q!=NULL; q=q->Prox)
     {
@@ -94,10 +104,10 @@ void imprimeFila (Fila* f)
 
 Fila* liberaFila (Fila* f)
 {
-    no* q = f->ini;
+    tarefa* q = f->ini;
     while (q!=NULL)
     {
-        no* t = q->Prox;
+        tarefa* t = q->Prox;
         free(q);
         q = t;
     }
@@ -105,18 +115,71 @@ Fila* liberaFila (Fila* f)
     return NULL;
 }
 
-Fila* mergeFilaPrioridades(Fila* f1, Fila* f2,Fila *f3){
-    Fila * prioridades=f1;
-    for(no *aux=f1->ini;aux!=NULL;aux=aux->Prox){
-        InsereFila(prioridades,aux);
+
+lista* mergeFilaPrioridades(Fila* f1, Fila* f2,Fila *f3){
+    lista * prioridades=CriaLista();
+    // atencao logica dos for
+    if(!VaziaFila(f3)){
+        for(tarefa *aux=f3->ini;aux!=NULL;aux=f3->ini){
+            prioridades=insereLista(prioridades,RetiraFila(f3));
+        }
     }
-    for(no *aux=f2->ini;aux!=NULL;aux=aux->Prox){
-        InsereFila(prioridades,aux);
+    if(!VaziaFila(f2)){
+        for(tarefa *aux=f2->ini;aux!=NULL;aux=f2->ini){
+            prioridades=insereLista(prioridades,RetiraFila(f2));
+        }
     }
-    for(no *aux=f3->ini;aux!=NULL;aux=aux->Prox){
-        InsereFila(prioridades,aux);
+    if(!VaziaFila(f1)){
+        for(tarefa *aux=f1->ini;aux!=NULL;aux=f1->ini){
+            prioridades=insereLista(prioridades,RetiraFila(f1));
+        }
     }
     return prioridades;
 }
+
+void ordenaFilaTermino(Fila *recebida){
+    int n=contaFila(recebida),i=0;
+    tarefa *troca,**vet;
+    vet=(tarefa**)malloc(n*sizeof(tarefa));
+
+    while(!VaziaFila(recebida)){
+        vet[i]=RetiraFila(recebida);
+        i++;
+    }
+
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++)
+            if(vet[i]->Termino->Ano > vet[j]->Termino->Ano){
+                troca=vet[i];
+                vet[i]=vet[j];
+                vet[j]=troca;
+            }
+            else if(vet[i]->Termino->Ano == vet[j]->Termino->Ano){
+                    if(vet[i]->Termino->Mes > vet[j]->Termino->Mes){
+                        troca=vet[i];
+                        vet[i]=vet[j];
+                        vet[j]=troca;
+
+                    }
+                    else if(vet[i]->Termino->Mes == vet[j]->Termino->Mes){
+                            if(vet[i]->Termino->Dia > vet[j]->Termino->Dia){
+                                troca=vet[i];
+                                vet[i]=vet[j];
+                                vet[j]=troca;
+                            }
+
+                    }
+                }
+
+    }
+
+    for(int i=0;i<n;i++){
+        InsereFila(recebida,vet[i]);
+    }
+
+    free(vet);
+}
+
 
 #endif // FILA_H_INCLUDED
