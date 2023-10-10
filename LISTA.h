@@ -212,8 +212,27 @@ void ordenaLista(lista** recebida){
 
 }
 
+void imprimeComSemAtraso(lista *recebida){
+
+    lista  *atrasada=CriaLista();
+
+    for(tarefa* aux=recebida->tarefa;aux!=NULL;aux=aux->Prox){
+        if(verificaTarefaAtrasada(aux)==-1){
+                atrasada=insereLista(atrasada,RetiraTarefaLista(recebida,aux->Codigo));
+
+        }
+    }
+
+    printf("\n Tarefas atrasadas: ");
+    imprimeLista(atrasada);
+    printf("\n Tarefas em dia: ");
+    imprimeLista(recebida);
 
 
+    for(tarefa* aux=atrasada->tarefa;aux!=NULL;aux=atrasada->tarefa){
+        recebida=insereLista(recebida,RetiraTarefaLista(atrasada,aux->Codigo));
+    }
+}
 
 
 

@@ -84,6 +84,37 @@ tarefa* AdicionaValoresTarefa(){
     return recebida;
 }
 
+int verificaTarefaAtrasada(tarefa* aux){
+    int verifica=0;
+    time_t  agora;
+    struct tm *atual;
+
+    time(&agora);
+    atual=localtime(&agora);
+    atual->tm_year=atual->tm_year+1900;
+    atual->tm_mon=atual->tm_mon+1;
+
+    if(aux->Termino->Ano < atual->tm_year){
+            aux->Status=-1;
+            verifica=-1;
+    }
+    else if(aux->Termino->Ano == atual->tm_year){
+        if(aux->Termino->Mes < atual->tm_mon){
+            aux->Status=-1;
+            verifica=-1;
+        }
+        else if(aux->Termino->Mes == atual->tm_mon){
+            if(aux->Termino->Dia < atual->tm_mday){
+                aux->Status=-1;
+                verifica=-1;
+            }
+        }
+    }
+
+    return verifica;
+
+}
+
 
 
 

@@ -1,21 +1,21 @@
 # depslib dependency file v1.0
-1696613916 source:c:\users\maugo\onedrive\documentos\mauricio\estrutura de dados- c\gerenciador de tarefas\main.c
+1696859987 source:c:\users\maugo\onedrive\documentos\mauricio\estrutura de dados- c\gerenciador de tarefas\main.c
 	<stdio.h>
 	<stdlib.h>
 	"LISTA.h"
 	"FILA.h"
 	"TAREFA.h"
 
-1696613847 c:\users\maugo\onedrive\documentos\mauricio\estrutura de dados- c\gerenciador de tarefas\lista.h
+1696860102 c:\users\maugo\onedrive\documentos\mauricio\estrutura de dados- c\gerenciador de tarefas\lista.h
 	"TAREFA.h"
 	"FILA.h"
 	<time.h>
 
-1696526300 c:\users\maugo\onedrive\documentos\mauricio\estrutura de dados- c\gerenciador de tarefas\tarefa.h
+1696860826 c:\users\maugo\onedrive\documentos\mauricio\estrutura de dados- c\gerenciador de tarefas\tarefa.h
 	"LISTA.h"
 	<time.h>
 
-1696614420 c:\users\maugo\onedrive\documentos\mauricio\estrutura de dados- c\gerenciador de tarefas\fila.h
+1696614563 c:\users\maugo\onedrive\documentos\mauricio\estrutura de dados- c\gerenciador de tarefas\fila.h
 	"TAREFA.h"
 	"LISTA.h"
 

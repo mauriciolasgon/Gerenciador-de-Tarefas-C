@@ -47,7 +47,9 @@ void menu(int *escolha,lista **listaTarefas,lista **listaPendentes,lista **lista
             printf("\n");
             break;
         case 7:
-            // imprimeComSemAtraso();
+            imprimeComSemAtraso(*listaTarefas);
+            printf("\n");
+
             break;
         case 8:
             break;
@@ -65,8 +67,8 @@ void menu(int *escolha,lista **listaTarefas,lista **listaPendentes,lista **lista
 }
 int main()
 {
-    lista* ListaTarefas=CriaLista(), *listaPendentes=CriaLista(),*listaConcluidas=CriaLista(),*listaAtrasadas=CriaLista();
-    Fila * FilaPrioridade1=CriaFila(),*FilaPrioridade2=CriaFila(),*FilaPrioridade3=CriaFila(),*FilaPrioridades=CriaFila();
+    lista* ListaTarefas=CriaLista(), *listaPendentes=CriaLista(),*listaConcluidas=CriaLista();
+
     int escolha;
 
     do{
