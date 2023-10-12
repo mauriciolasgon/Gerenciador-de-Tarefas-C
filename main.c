@@ -7,7 +7,9 @@
 typedef struct TAREFA Tarefa;
 
 void menu(int *escolha,lista **listaTarefas,lista **listaPendentes,lista **listaConcluidas){
-
+    tarefa *taf;
+    int x;
+    system("cls");
     printf(" 1- Adicionar uma nova tarefa\n");
     printf(" 2- Modificar tarefa\n");
     printf(" 3- Concluir tarefa\n");
@@ -17,51 +19,61 @@ void menu(int *escolha,lista **listaTarefas,lista **listaPendentes,lista **lista
     printf(" 7- Visualizar tarefas com atraso e sem atraso\n");
     printf(" 8- Sair do programa\n\n -> ");
     scanf("%d",escolha);
-    system("cls");
+
     switch(*escolha){
         case 1:
+            taf=AdicionaValoresTarefa();
 
-            *listaTarefas=insereLista(*listaTarefas,AdicionaValoresTarefa());
+            // x recebe valor da função
+            x=verificaTarefaAtrasada(taf);
+            *listaTarefas=insereLista(*listaTarefas,taf);
+
+            printf("\n");
+            system("pause");
 
             break;
         case 2:
-
             modificaTarefa(*listaTarefas,listaPendentes,0);
+            printf("\n");
+            system("pause");
             break;
         case 3:
             concluirTarefa(listaTarefas,listaConcluidas);
+            ordenaLista(listaConcluidas);
             printf("\n");
+            system("pause");
             break;
         case 4:
             modificaTarefa(*listaTarefas,listaPendentes,1);
+            ordenaLista(listaPendentes);
+            printf("\n");
+            system("pause");
             break;
         case 5:
-
-            imprimeLista(*listaPendentes);
-
+            imprimeListaeTarefas(*listaPendentes);
             printf("\n");
+            system("pause");
 
             break;
         case 6:
-            imprimeLista(*listaConcluidas);
+            imprimeListaeTarefas(*listaConcluidas);
             printf("\n");
+            system("pause");
             break;
         case 7:
-            imprimeComSemAtraso(*listaTarefas);
+            imprimeComSemAtraso(*listaConcluidas);
+            ordenaLista(listaConcluidas);
             printf("\n");
+            system("pause");
 
             break;
         case 8:
             break;
-        case 9:
-            ordenaLista(listaTarefas);
-            printf("\n");
 
-            imprimeLista(*listaTarefas);
-            printf("\n");
-            break;
-
-
+    }
+    if(*escolha<1 || *escolha>8){
+        printf("\nOpcao invalida\n");
+        system("pause");
     }
 
 }
@@ -77,6 +89,8 @@ int main()
 
 
     }while(escolha!=8);
+    system("cls");
+    printf("Feito por :\n Mauricio\n Renan\n Tiago");
 
 
     return 0;

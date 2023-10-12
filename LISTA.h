@@ -52,6 +52,7 @@ tarefa * RetiraTarefaLista(lista* recebida,int codigo ){
 
 
 lista* insereLista(lista* recebida,tarefa* novaTarefa){
+
         novaTarefa->Prox=recebida->tarefa;
         recebida->tarefa=novaTarefa;
 
@@ -96,26 +97,10 @@ void liberaLista(lista *l){
     }
 }
 
-void concluirTarefa(lista** pendentes,lista** concluidas){
-    tarefa * tarefa;
-    int cod;
-    imprimeLista(*pendentes);
-    printf("\n Digite o codigo da tarefa que deseja concluir");
-    scanf("%d",&cod);
-    tarefa=RetiraTarefaLista(*pendentes,cod);
 
-    printf("\n Data de termino : ");
-    scanf("%d",&tarefa->Termino->Dia);
-    scanf("%d",&tarefa->Termino->Mes);
-    scanf("%d",&tarefa->Termino->Ano);
-
-    *concluidas=insereLista(*concluidas,tarefa);
-
-
-}
 
 tarefa * achaTarefaLista(lista* recebida,int codigo){
-    tarefa* taf;
+    tarefa* taf=CriaTarefa();
     for(tarefa* aux=recebida->tarefa;aux!=NULL;aux=aux->Prox){
         if(aux->Codigo==codigo){
             taf=aux;
@@ -124,61 +109,156 @@ tarefa * achaTarefaLista(lista* recebida,int codigo){
     return taf;
 }
 
+
+
+void concluirTarefa(lista** tarefas,lista** concluidas){
+    if(!VaziaLista(*tarefas)){
+    tarefa * tarefa;
+    int cod,v;
+    imprimeLista(*tarefas);
+    printf("\n Digite o codigo da tarefa que deseja concluir ou digite 'v' para voltar\n");
+    scanf("%d",&cod);
+    v=getchar();
+    if(v!='v'){
+    tarefa=achaTarefaLista(*tarefas,cod);
+    while(tarefa==NULL){
+        printf("\nCodigo invalido\n-> ");
+        scanf("%d",&cod);
+        v=getchar();
+        tarefa=achaTarefaLista(*tarefas,cod);
+    }
+    tarefa=RetiraTarefaLista(*tarefas,cod);
+    fflush(stdin);
+    printf("\nData de termino : ");
+    scanf("%d%d%d", &tarefa->Termino->Dia,&tarefa->Termino->Mes,&tarefa->Termino->Ano);
+
+    *concluidas=insereLista(*concluidas,tarefa);
+    }
+    }
+    else{
+        printf("\nA lista de tarefas esta vazia\n");
+    }
+}
+
+
+
+
 void modificaTarefa(lista* listaTarefas,lista**pendentes,int aux){
-    int codigo;
-    tarefa* recebida=CriaTarefa();
-    if(!VaziaLista(listaTarefas)){
-        imprimeLista(listaTarefas);
-        printf(" \nDigite o codigo da tarefa que deseja modificar:  \n");
-        scanf("%d",&codigo);
-        recebida=achaTarefaLista(listaTarefas,codigo);
-        if(aux==0){
+    int codigo,x,voltar;
+    tarefa* recebida,*tafPen;
+
+    if(aux==0){
+        if(!VaziaLista(listaTarefas)){
             int escolha;
-            ImprimeTarefa(recebida);
-            printf("\n Qual topico deseja modificar? ");
-            scanf("%d",&escolha);
-            if(escolha==1 || escolha==4){
-                printf("\n Esse topico nao pode ser alterado");
+            imprimeLista(listaTarefas);
+            printf(" \nDigite o codigo da tarefa que deseja modificar ou digite 'v' para voltar:  \n");
+            scanf("%d",&codigo);
+            voltar=getchar();
+            if(voltar!='v'){
+                recebida=achaTarefaLista(listaTarefas,codigo);
+                while(recebida==NULL){
+                    printf("\nTarefa nao encontrada....\nDigite o codigo novamente -> ");
+                    scanf("%d",&codigo);
+                    voltar=getchar();
+                    recebida=achaTarefaLista(listaTarefas,codigo);
+                }
+
+                ImprimeTarefa(recebida);
+                printf("\n Qual topico deseja modificar? ");
+                scanf("%d",&escolha);
+                if(escolha==1 || escolha==4 || escolha==6){
+                    printf("\n Esse topico nao pode ser alterado");
+                }
+                switch(escolha){
+                    case 2:
+                        fflush(stdin);
+                        printf("\n Novo nome: ");
+                        scanf("%[^\n]",recebida->Nome);
+                        break;
+                    case 3:
+                        fflush(stdin);
+                        printf("\n Novo projeto a que pertence: ");
+                        scanf("%[^\n]",recebida->Projeto);
+                        break;
+                    case 5:
+                        printf("\n Nova data de termino: ");
+                        scanf("%d%d%d", &recebida->Termino->Dia,&recebida->Termino->Mes,&recebida->Termino->Ano);
+                        break;
+
+                    case 7:
+                        printf("\n Nova prioridade");
+                        scanf("%d",&recebida->Prioridade);
+                        do{
+                            printf("Prioridade invalida\n Insira novamente....\n");
+                            scanf("%d", &recebida->Prioridade);
+                        }while(recebida->Prioridade<1 || recebida->Prioridade>3);
+                        break;
             }
-            switch(escolha){
-                case 2:
-                    printf("\n Novo nome: ");
-                    scanf("%[^\n]",recebida->Nome);
-                    break;
-                case 3:
-                    printf("\n Novo projeto a que pertence: ");
-                    scanf("%[^\n]",recebida->Projeto);
-                    break;
-                case 5:
-                    printf("\n Nova data de termino: ");
-                    scanf("%d",&recebida->Termino->Dia);
-                    scanf("%d",&recebida->Termino->Mes);
-                    scanf("%d",&recebida->Termino->Ano);
-                    break;
-                case 6:
-                    printf("\n Novo status");
-                    scanf("%d",&recebida->Status);
-                    break;
-                case 7:
-                    printf("\n Novs prioridade");
-                    scanf("%d",&recebida->Prioridade);
-                    break;
             }
 
-            }
-            else{
-                printf("\n Digite o novo status da tarefa: ");
-                scanf("%d",&recebida->Status);
-                if(recebida->Status==-1){
-                        *pendentes=insereLista(*pendentes,RetiraTarefaLista(listaTarefas,recebida->Codigo));
-                }
+        }
+        else{
+            printf(" Nao existem tarefas na lista de tarefas");
+            printf("\n");
             }
     }
-    else
-        {
-        printf(" Nao existem tarefas");
-        printf("\n");
+    else{
+            if(!VaziaLista(listaTarefas)||!VaziaLista(*pendentes)){
+            printf("Lista de tarefas:\n ");
+            imprimeLista(listaTarefas);
+            printf("\nTarefas pendentes:\n ");
+            imprimeLista(*pendentes);
+
+            printf(" \nDigite o codigo da tarefa que deseja modificar ou digite 'v' para voltar:  \n");
+            scanf("%d",&codigo);
+            voltar=getchar();
+            if(voltar!='v'){
+                recebida=achaTarefaLista(listaTarefas,codigo);
+                tafPen=achaTarefaLista(*pendentes,codigo);
+
+                while(recebida==NULL && tafPen==NULL){
+                    printf("\nTarefa nao encontrada....\nDigite o codigo novamente -> ");
+                    scanf("%d",&codigo);
+                    voltar=getchar();
+                    recebida=achaTarefaLista(listaTarefas,codigo);
+                    tafPen=achaTarefaLista(*pendentes,codigo);
+                }
+
+                printf("\n1- Adicionar pendencia a tarefa\n2- Retirar pendencia da tarefa\n");
+                scanf("%d",&x);
+                if(x==1  && (!VaziaLista(listaTarefas) || !VaziaLista(*pendentes))){
+                    if(tafPen!=NULL){
+                        printf("\nEssa tarefa ja esta pendente\n");
+                    }
+                    else{
+                    recebida->Status=-1;
+                    *pendentes=insereLista(*pendentes,RetiraTarefaLista(listaTarefas,recebida->Codigo));
+                    printf("\n Pendencia adicionada com sucesso!!");
+                    }
+                }
+                else if(x==2 && (!VaziaLista(listaTarefas) || !VaziaLista(*pendentes))){
+                    if(recebida!=NULL){
+                        printf("\nA tarefa nao esta na lista de pendencia\n");
+                    }
+                    else{
+                    tafPen=RetiraTarefaLista(*pendentes,tafPen->Codigo);
+                    x=verificaTarefaAtrasada(tafPen);
+                    listaTarefas=insereLista(listaTarefas,tafPen);
+                    printf("\n Pendencia retirada com sucesso!!");
+                    }
+                }
+            else{
+                printf("Opcao invalida\n");
+            }
         }
+            }
+        else{
+            printf(" Nao existem tarefas na lista de tarefas");
+            printf("\n");
+            }
+
+    }
+
 
 
 }
@@ -211,27 +291,64 @@ void ordenaLista(lista** recebida){
 
 
 }
-
 void imprimeComSemAtraso(lista *recebida){
 
-    lista  *atrasada=CriaLista();
-
-    for(tarefa* aux=recebida->tarefa;aux!=NULL;aux=aux->Prox){
-        if(verificaTarefaAtrasada(aux)==-1){
+    if(!VaziaLista(recebida)){
+        lista  *atrasada=CriaLista();
+        tarefa* prox=recebida->tarefa->Prox;
+        for(tarefa* aux=recebida->tarefa;aux!=NULL;aux=prox){
+            if(aux->Status==1){
                 atrasada=insereLista(atrasada,RetiraTarefaLista(recebida,aux->Codigo));
+                prox=recebida->tarefa;
+
+            }
+            else{
+            prox=aux->Prox;
+            }
 
         }
+
+        printf("\n Tarefas atrasadas: ");
+        imprimeLista(atrasada);
+        printf("\n Tarefas em dia: ");
+        imprimeLista(recebida);
+
+
+        for(tarefa* aux=atrasada->tarefa;aux!=NULL;aux=atrasada->tarefa){
+            recebida=insereLista(recebida,RetiraTarefaLista(atrasada,aux->Codigo));
+        }
     }
-
-    printf("\n Tarefas atrasadas: ");
-    imprimeLista(atrasada);
-    printf("\n Tarefas em dia: ");
-    imprimeLista(recebida);
-
-
-    for(tarefa* aux=atrasada->tarefa;aux!=NULL;aux=atrasada->tarefa){
-        recebida=insereLista(recebida,RetiraTarefaLista(atrasada,aux->Codigo));
+    else{
+        printf("\n A lista de tarefas concluidas esta vazia");
     }
+}
+
+void imprimeListaeTarefas(lista *recebida){
+    tarefa* taf;
+    int visualizar,enter;
+
+    if(!VaziaLista(recebida)){
+        imprimeLista(recebida);
+        printf("\nCaso queira visualizar uma tarefa digite seu codigo ou apenas digite 's' para sair\n-> ");
+        scanf("%d",&visualizar);
+        enter=getchar();
+
+        while(enter!='s'){
+            taf=achaTarefaLista(recebida,visualizar);
+            if(taf!=NULL){
+                ImprimeTarefa(taf);
+            }
+            else{
+                printf("\nEssa tarefa nao foi encontrada\n ");
+                }
+            printf("\nCodigo-> ");
+            scanf("%d",&visualizar);
+            enter=getchar();
+        }
+            }
+    else{
+        printf("\nA lista esta vazia");
+        }
 }
 
 

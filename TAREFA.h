@@ -29,58 +29,46 @@ tarefa * CriaTarefa(){
     return NULL;
 }
 void ImprimeTarefa(tarefa* recebida){
-    printf("\n 1- Codigo : %d",recebida->Codigo);
-    printf("\n 2- Nome : %s",recebida->Nome);
-    printf("\n 3- Projeto a qual faz parte : %s",recebida->Projeto);
-    printf("\n 4- Data de inicio : %d/%d/%d",recebida->Inicio->Dia,recebida->Inicio->Mes,recebida->Inicio->Ano);
-    printf("\n 5- Data de termino: %d/%d/%d",recebida->Termino->Dia,recebida->Termino->Mes,recebida->Termino->Ano);
-    printf("\n 6- Status: %d",recebida->Status);
-    printf("\n 7- Prioridade: %d",recebida->Prioridade);
+    printf("\n 1- Codigo : %d ",recebida->Codigo);
+    printf("\n 2- Nome : %s ",recebida->Nome);
+    printf("\n 3- Projeto a qual faz parte : %s ",recebida->Projeto);
+    printf("\n 4- Data de inicio : %d/%d/%d ",recebida->Inicio->Dia,recebida->Inicio->Mes,recebida->Inicio->Ano);
+    printf("\n 5- Data de termino: %d/%d/%d ",recebida->Termino->Dia,recebida->Termino->Mes,recebida->Termino->Ano);
+    printf("\n 6- Status: %d ",recebida->Status);
+    printf("\n 7- Prioridade: %d ",recebida->Prioridade);
 }
 
 
 
 tarefa* AdicionaValoresTarefa(){
     tarefa* recebida=(tarefa*)malloc(sizeof(tarefa));
-    data* Data=(data*)malloc(sizeof(data));
+    data* inicio=(data*)malloc(sizeof(data));
     data* termino=(data*)malloc(sizeof(data));
-    time_t  agora;
-    struct tm *p;
 
-    time(&agora);
-    p=localtime(&agora);
-
-
-
-    printf(" Digite o codigo: \n");
+    printf(" Digite o codigo: ");
     scanf(" %d", &recebida->Codigo);
-    printf(" Nome da tarefa:  \n");
+    printf("\n Nome da tarefa: ");
     scanf(" %[^\n]", recebida->Nome);
     fflush(stdin);
-    printf(" Nome do projeto:  \n");
+    printf("\n Nome do projeto: ");
     scanf(" %[^\n]", recebida->Projeto);
     fflush(stdin);
-    printf(" Data de inicio:  \n");
+    printf("\n Data de inicio: ");
 
-    Data->Dia=p->tm_mday;
+    scanf("%d%d%d", &inicio->Dia,&inicio->Mes,&inicio->Ano);
+    recebida->Inicio=inicio;
 
-    Data->Mes=p->tm_mon+1;
-
-    Data->Ano=p->tm_year+1900;
-    recebida->Inicio=Data;
-
-
-
-    printf(" %d/%d/%d\n",recebida->Inicio->Dia,recebida->Inicio->Mes,recebida->Inicio->Ano);
-    printf(" Data de termino:  \n");
-    scanf(" %d", &termino->Dia);
-    scanf(" %d", &termino->Mes);
-    scanf(" %d", &termino->Ano);
+    printf("\n Data de termino: ");
+    scanf(" %d%d%d", &termino->Dia,&termino->Mes,&termino->Ano);
     recebida->Termino=termino;
-    printf(" Status:  \n");
-    scanf(" %d", &recebida->Status);
-    printf(" Prioridade:  \n");
+    recebida->Status=0;
+    printf("\n Prioridade: ");
+    scanf("%d", &recebida->Prioridade);
+    while(recebida->Prioridade<1 || recebida->Prioridade>3){
+    printf("Prioridade invalida\n Insira novamente....\n");
     scanf(" %d", &recebida->Prioridade);
+    }
+
     return recebida;
 }
 
@@ -95,18 +83,18 @@ int verificaTarefaAtrasada(tarefa* aux){
     atual->tm_mon=atual->tm_mon+1;
 
     if(aux->Termino->Ano < atual->tm_year){
-            aux->Status=-1;
-            verifica=-1;
+            aux->Status=1;
+            verifica=1;
     }
     else if(aux->Termino->Ano == atual->tm_year){
         if(aux->Termino->Mes < atual->tm_mon){
-            aux->Status=-1;
-            verifica=-1;
+            aux->Status=1;
+            verifica=1;
         }
         else if(aux->Termino->Mes == atual->tm_mon){
             if(aux->Termino->Dia < atual->tm_mday){
-                aux->Status=-1;
-                verifica=-1;
+                aux->Status=1;
+                verifica=1;
             }
         }
     }
