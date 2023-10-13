@@ -8,7 +8,6 @@ typedef struct TAREFA Tarefa;
 
 void menu(int *escolha,lista **listaTarefas,lista **listaPendentes,lista **listaConcluidas){
     tarefa *taf;
-    int x;
     system("cls");
     printf(" 1- Adicionar uma nova tarefa\n");
     printf(" 2- Modificar tarefa\n");
@@ -25,7 +24,7 @@ void menu(int *escolha,lista **listaTarefas,lista **listaPendentes,lista **lista
             taf=AdicionaValoresTarefa();
 
             // x recebe valor da função
-            x=verificaTarefaAtrasada(taf);
+            verificaTarefaAtrasada(taf);
             *listaTarefas=insereLista(*listaTarefas,taf);
 
             printf("\n");
@@ -90,7 +89,7 @@ int main()
 
     }while(escolha!=8);
     system("cls");
-    printf("Feito por :\n Mauricio\n Renan\n Tiago");
+    printf("Feito por :\n Mauricio Lasca\n Renan Rohers \n Tiago Dalecio");
 
 
     return 0;

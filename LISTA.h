@@ -116,7 +116,7 @@ void concluirTarefa(lista** tarefas,lista** concluidas){
     tarefa * tarefa;
     int cod,v;
     imprimeLista(*tarefas);
-    printf("\n Digite o codigo da tarefa que deseja concluir ou digite 'v' para voltar\n");
+    printf("\nDigite o codigo da tarefa que deseja concluir ou digite 'v' para voltar\n-> ");
     scanf("%d",&cod);
     v=getchar();
     if(v!='v'){
@@ -151,7 +151,7 @@ void modificaTarefa(lista* listaTarefas,lista**pendentes,int aux){
         if(!VaziaLista(listaTarefas)){
             int escolha;
             imprimeLista(listaTarefas);
-            printf(" \nDigite o codigo da tarefa que deseja modificar ou digite 'v' para voltar:  \n");
+            printf(" \nDigite o codigo da tarefa que deseja modificar ou digite 'v' para voltar:  \n-> ");
             scanf("%d",&codigo);
             voltar=getchar();
             if(voltar!='v'){
@@ -209,7 +209,7 @@ void modificaTarefa(lista* listaTarefas,lista**pendentes,int aux){
             printf("\nTarefas pendentes:\n ");
             imprimeLista(*pendentes);
 
-            printf(" \nDigite o codigo da tarefa que deseja modificar ou digite 'v' para voltar:  \n");
+            printf(" \nDigite o codigo da tarefa que deseja modificar ou digite 'v' para voltar:  \n-> ");
             scanf("%d",&codigo);
             voltar=getchar();
             if(voltar!='v'){
